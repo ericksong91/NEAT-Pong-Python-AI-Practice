@@ -1,5 +1,8 @@
 import pygame
 from pong import Game
+import neat
+import os
+import pickle
 
 class PongGame:
     def __init__(self, window, width, height):
@@ -33,3 +36,27 @@ class PongGame:
         pygame.quit
 
 # runs the game while run is True
+        
+def eval_genomes(genomes, config):
+    pass
+
+def run_neat(config):
+    p = neat.Population(config)
+    p.add_reporter(neat.StdOutReporter(True))
+    stats = neat.StatisticsReporter()
+    p.add_reporter(stats)
+    p.add_reporter(neat.Checkpointer(1)) # saves a checkpoint after every X generation, in this case 1
+
+    winner = p.run(eval_genomes, 50)
+
+
+if __name__ == "__main__":
+    local_dir = os.path.dirname(__file__)
+    config_path = os.path.join(local_dir, "config.txt")
+
+    config = neat.Config(
+        neat.DefaultGenome, neat.DefaultReproduction, 
+        neat.DefaultSpeciestSet, neat.DefaultStagnation, 
+        config_path)
+    
+    run_neat(config)
